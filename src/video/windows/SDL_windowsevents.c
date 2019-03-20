@@ -410,6 +410,11 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         SDL_SendSysWMEvent(&wmmsg);
     }
 
+    if (g_WindowsMessageLoopBlocked)
+    {
+      OutputDebugStringA("Blocked: ");
+    }
+
     /* Get the window data for the window */
     data = (SDL_WindowData *) GetProp(hwnd, TEXT("SDL_WindowData"));
     if (!data) {
@@ -1038,6 +1043,7 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_NCCALCSIZE:
         {
+            OutputDebugStringA("WM_NCCALCSIZE\n");
             Uint32 window_flags = SDL_GetWindowFlags(data->window);
             if (wParam == TRUE && (window_flags & SDL_WINDOW_BORDERLESS) && !(window_flags & SDL_WINDOW_FULLSCREEN)) {
                 /* When borderless, need to tell windows that the size of the non-client area is 0 */

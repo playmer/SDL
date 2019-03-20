@@ -595,6 +595,23 @@ extern DECLSPEC void* SDLCALL SDL_SetWindowData(SDL_Window * window,
 extern DECLSPEC void *SDLCALL SDL_GetWindowData(SDL_Window * window,
                                                 const char *name);
 
+typedef void (SDLCALL * SDL_WindowBlocker) (void *userdata, SDL_Window * window);
+
+/**
+ *  \brief Associate a pointer with a window blocker event.
+ *
+ *  \param window   The window to associate with the blocker callback and pointer.
+ *  \param blocker The associated callback.
+ *  \param userdata The associated pointer.
+ *
+ *  \note The name is case-sensitive.
+ *
+ *  \sa SDL_GetWindowData()
+ */
+extern DECLSPEC void SDLCALL SDL_SetWindowBlockerData(SDL_Window * window,
+                                                      SDL_WindowBlocker blocker,
+                                                      void *userdata);
+
 /**
  *  \brief Set the position of a window.
  *

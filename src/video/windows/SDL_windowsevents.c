@@ -1081,6 +1081,33 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
+    case WM_ENTERSIZEMOVE:
+        {
+            OutputDebugStringA("WM_ENTERSIZEMOVE\n");
+            SDL_Window *window = data->window;
+            window->is_blocking = SDL_TRUE;
+            g_WindowsMessageLoopBlocked = SDL_TRUE;
+            SetTimer(hwnd, 1, USER_TIMER_MINIMUM, NULL);
+        }
+        break;
+    case WM_EXITSIZEMOVE:
+        {
+            OutputDebugStringA("WM_EXITSIZEMOVE\n");
+            SDL_Window *window = data->window;
+            window->is_blocking = SDL_FALSE;
+            g_WindowsMessageLoopBlocked = SDL_FALSE;
+            KillTimer(hwnd, 1);
+        }
+        break;
+    case WM_TIMER:
+        {
+            OutputDebugStringA("WM_TIMER\n");
+            SDL_Window *window = data->window;
+            if (window->blocker) {
+              window->blocker(window->blockerdata, window);
+            }
+        }
+        break;
     }
 
     /* If there's a window proc, assume it's going to handle messages */
@@ -1125,7 +1152,7 @@ WIN_PumpEvents(_THIS)
     DWORD start_ticks = GetTickCount();
     int new_messages = 0;
 
-    if (g_WindowsEnableMessageLoop) {
+    if (g_WindowsEnableMessageLoop && (SDL_FALSE == g_WindowsMessageLoopBlocked)) {
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
             if (g_WindowsMessageHook) {
                 g_WindowsMessageHook(g_WindowsMessageHookData, msg.hwnd, msg.message, msg.wParam, msg.lParam);

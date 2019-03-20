@@ -1535,6 +1535,7 @@ SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags)
     window->brightness = 1.0f;
     window->next = _this->windows;
     window->is_destroying = SDL_FALSE;
+    window->is_blocking = SDL_FALSE;
 
     if (_this->windows) {
         _this->windows->prev = window;
@@ -1867,6 +1868,26 @@ SDL_GetWindowData(SDL_Window * window, const char *name)
         }
     }
     return NULL;
+}
+
+
+void
+SDL_SetWindowBlockerData(SDL_Window * window, SDL_WindowBlocker blocker, void *userdata)
+{
+  SDL_WindowUserData *data;
+
+  CHECK_WINDOW_MAGIC(window, NULL);
+
+  /* Input validation */
+  if (blocker == NULL) {
+    SDL_InvalidParamError("blocker");
+    return;
+  }
+
+  window->blocker = blocker;
+  window->blockerdata = userdata;
+
+  return;
 }
 
 void

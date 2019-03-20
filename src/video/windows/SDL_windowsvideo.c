@@ -41,6 +41,7 @@ static void WIN_VideoQuit(_THIS);
 
 /* Hints */
 SDL_bool g_WindowsEnableMessageLoop = SDL_TRUE;
+SDL_bool g_WindowsMessageLoopBlocked = SDL_FALSE;
 SDL_bool g_WindowFrameUsableWhileCursorHidden = SDL_TRUE;
 
 static void SDLCALL

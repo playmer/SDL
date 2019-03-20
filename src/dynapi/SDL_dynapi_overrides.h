@@ -521,6 +521,7 @@
 #define SDL_SetWindowIcon SDL_SetWindowIcon_REAL
 #define SDL_SetWindowData SDL_SetWindowData_REAL
 #define SDL_GetWindowData SDL_GetWindowData_REAL
+#define SDL_SetWindowBlockerData SDL_SetWindowBlockerData_REAL
 #define SDL_SetWindowPosition SDL_SetWindowPosition_REAL
 #define SDL_GetWindowPosition SDL_GetWindowPosition_REAL
 #define SDL_SetWindowSize SDL_SetWindowSize_REAL
